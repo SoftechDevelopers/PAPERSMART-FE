@@ -93,7 +93,7 @@ const App = props => {
       <Head>
         <title>{`${themeConfig.templateName}`}</title>
         <meta name='description' content={`${themeConfig.templateName}`} />
-        <meta name='keywords' content='Smart ERP 5.0' />
+        <meta name='keywords' content='Smart Paper' />
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 

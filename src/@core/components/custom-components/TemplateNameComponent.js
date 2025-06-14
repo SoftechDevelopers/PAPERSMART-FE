@@ -11,12 +11,12 @@ const TemplateNameComponent = ({ mode }) => {
       {mode === 'light' ? (
         <>
           <span style={{ color: '#4a218a' }}>{partOne}</span>
-          <span style={{ color: '#f36e0d' }}>{partTwo}</span>
+          <span style={{ color: '#E4A324' }}>{partTwo}</span>
         </>
       ) : (
         <>
           <span style={{ color: '#E0E0E0' }}>{partOne}</span>
-          <span style={{ color: '#ff7e20' }}>{partTwo}</span>
+          <span style={{ color: '#E4A324' }}>{partTwo}</span>
         </>
       )}
     </div>
