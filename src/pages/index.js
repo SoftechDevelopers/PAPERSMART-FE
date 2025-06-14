@@ -1,5 +1,5 @@
 const Home = () => {
-  return <>Welcome to Smart ERP 5.0</>
+  return <>Welcome to Smart Paper</>
 }
 
 export default Home

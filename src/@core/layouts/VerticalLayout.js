@@ -116,10 +116,7 @@ const VerticalLayout = props => {
           {/* Footer Component */}
           <Footer footerStyles={footerProps?.sx} footerContent={footerProps?.content} {...props} />
         </MainContentWrapper>
-      </VerticalLayoutWrapper>
-
-      {/* Customizer */}
-      {disableCustomizer || hidden ? null : <Customizer />}
+      </VerticalLayoutWrapper>     
 
       {/* Scroll to top button */}
       {scrollToTop ? (

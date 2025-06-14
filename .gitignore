@@ -37,6 +37,6 @@ package-lock.json
 .yarnrc.yml
 package-lock.json
 package-lock.json
-package.json
 yarn.lock
-package.json
+
+/.yarn

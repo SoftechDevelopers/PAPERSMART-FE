@@ -16,7 +16,7 @@ const Home = () => {
       <Grid item xs={12} sm={6}>
         <Card>
           <CardHeader sx={{ pb: 5 }} title={`Hi, ${user?.name}`} titleTypographyProps={{ variant: 'h6' }} />
-          <CardContent>Welcome to Smart ERP 5.0</CardContent>
+          <CardContent>Welcome to Smart Paper</CardContent>
         </Card>
       </Grid>
     </Grid>
