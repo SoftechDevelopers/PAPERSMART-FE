@@ -24,8 +24,7 @@ import Icon from 'src/@core/components/icon'
 
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  username: yup.string().required('Username is required'),
+  username: yup.string().email('Enter a valid email').required('Username is required'),
   role: yup.string().required('Role is required')
 })
 
@@ -36,13 +35,6 @@ const EditUser = ({ selectedUser }) => {
   const [dropdown, setDropdown] = useState({})
 
   const roleList = dropdown?.role?.map(({ id, name }) => (
-    <MenuItem key={id} value={id}>
-      {name}
-    </MenuItem>
-  ))
-  const staffList = dropdown?.staff || []
-
-  const partnerList = dropdown?.partner?.map(({ id, name }) => (
     <MenuItem key={id} value={id}>
       {name}
     </MenuItem>
@@ -90,11 +82,8 @@ const EditUser = ({ selectedUser }) => {
   // ** Form
   const defaultValues = {
     name: selectedUser?.name || '',
-    email: selectedUser?.email || '',
     username: selectedUser?.username || '',
-    role: selectedUser?.role_id || '',
-    staff: selectedUser?.staff_id || null,
-    partner: selectedUser?.partner_id || ''
+    role: selectedUser?.role_id || ''
   }
 
   const {
@@ -105,33 +94,25 @@ const EditUser = ({ selectedUser }) => {
 
   // ** Submit
   const onSubmit = async formData => {
-    if (formData?.partner === '') {
-      formData = { ...formData, partner: null }
-    }
-
-    if (!(formData?.staff && formData?.partner)) {
-      try {
-        setLoading(prev => ({ ...prev, submit: true }))
-        let data
-        if (!isUpdate) {
-          data = await apiRequest('post', '/user', formData, {}, null)
-        } else {
-          data = await apiRequest('put', `/user/${selectedUser?.id}`, formData, {}, null)
-        }
-
-        showSuccessToast(data?.message, 5000)
-      } catch (error) {
-        if (error.status === 422) {
-          const message = error?.response?.data?.errors
-          showErrorToast(message?.email || message?.username || message?.staff || message?.partner, 5000)
-        } else {
-          showErrorToast('Error while processing the user', 5000)
-        }
-      } finally {
-        setLoading(prev => ({ ...prev, submit: false }))
+    try {
+      setLoading(prev => ({ ...prev, submit: true }))
+      let data
+      if (!isUpdate) {
+        data = await apiRequest('post', '/user', formData, {}, null)
+      } else {
+        data = await apiRequest('put', `/user/${selectedUser?.id}`, formData, {}, null)
       }
-    } else {
-      showErrorToast('User can either be staff or partner')
+
+      showSuccessToast(data?.message, 5000)
+    } catch (error) {
+      if (error.status === 422) {
+        const message = error?.response?.data?.errors
+        showErrorToast(message?.email || message?.username, 5000)
+      } else {
+        showErrorToast('Error while processing the user', 5000)
+      }
+    } finally {
+      setLoading(prev => ({ ...prev, submit: false }))
     }
   }
 
@@ -149,16 +130,6 @@ const EditUser = ({ selectedUser }) => {
                   render={({ field }) => <TextField {...field} label='Name' error={Boolean(errors.name)} />}
                 />
                 {errors.name && <FormHelperText sx={{ color: 'error.main' }}>{errors.name.message}</FormHelperText>}
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Controller
-                  name='email'
-                  control={control}
-                  render={({ field }) => <TextField {...field} label='Email' error={Boolean(errors.email)} />}
-                />
-                {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -209,68 +180,6 @@ const EditUser = ({ selectedUser }) => {
                 )}
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <Controller
-                  name='staff'
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      options={staffList}
-                      getOptionLabel={option => option?.name || ''}
-                      onChange={(_, data) => {
-                        field.onChange(data ? data.id : null)
-                      }}
-                      isOptionEqualToValue={(option, value) => option && value && option.id === value.id}
-                      renderInput={params => <TextField {...params} label='Staff' />}
-                      value={staffList.find(staff => staff.id === Number(field.value)) || null}
-                      renderOption={(props, option) => (
-                        <li {...props} key={option.id} style={{ display: 'flex', alignItems: 'center' }}>
-                          <div>
-                            <span style={{ color: '#ff4d49' }}>{`ID: ${option.id}`}</span>
-                            <br />
-                            <span>{`Name: ${option.name}`}</span>
-                          </div>
-                        </li>
-                      )}
-                      loading={loading['dropdown']}
-                    />
-                  )}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id='partner-select-label'>Partner</InputLabel>
-                <Controller
-                  name='partner'
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      labelId='partner-select-label'
-                      {...field}
-                      label='Partner'
-                      value={field.value}
-                      onChange={e => {
-                        field.onChange(e)
-                      }}
-                    >
-                      <MenuItem value=''>
-                        <em>None</em>
-                      </MenuItem>
-                      {loading['dropdown'] ? (
-                        <MenuItem disabled>
-                          <CircularProgress size={20} style={{ marginRight: 10 }} />
-                        </MenuItem>
-                      ) : (
-                        partnerList
-                      )}
-                    </Select>
-                  )}
-                />
-              </FormControl>
-            </Grid>
             <Grid item xs={12} sm={12}>
               <LoadingButton
                 loading={loading['submit']}
@@ -282,7 +191,7 @@ const EditUser = ({ selectedUser }) => {
                 variant='contained'
                 sx={{ marginRight: 2 }}
               >
-                Submit
+                {isUpdate ? 'Update' : 'Submit'}
               </LoadingButton>
             </Grid>
           </Grid>

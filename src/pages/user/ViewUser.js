@@ -25,30 +25,15 @@ const columns = handleEdit => [
     width: 150
   },
   {
-    field: 'email',
-    headerName: 'Email',
-    width: 350
-  },
-  {
     field: 'username',
     headerName: 'Username',
-    width: 150
+    width: 350
   },
   {
     field: 'role_name',
     headerName: 'Role',
     width: 200,
     renderCell: params => <ChipComponent row={params.row} />
-  },
-  {
-    field: 'staff_id',
-    headerName: 'Staff ID',
-    width: 100
-  },
-  {
-    field: 'partner_id',
-    headerName: 'Partner ID',
-    width: 100
   },
   {
     field: 'actions',
